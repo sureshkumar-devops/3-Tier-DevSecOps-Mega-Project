@@ -1,5 +1,5 @@
-version '3.8'
-service:
+version: '3.8'
+services:
    mysqlsvc:
      image: mysql:8
      container_name: mysql-cont
@@ -23,7 +23,7 @@ service:
         DB_NAME: coupondb
         JWT_SECRET: w3logicsSecretKey
         RESET_ADMIN_PASS: 'true'
-     deponds_on:
+     depends_on:
         - mysqlsvc
      ports:
         - "5000:5000"
