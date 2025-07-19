@@ -1,0 +1,40 @@
+version '3.8'
+service:
+   mysqlsvc:
+     image: mysql:8
+     container_name: mysql-cont
+     restart: always
+     environment:
+        MYSQL_ROOT_PASSWORD: suresh
+        MYSQL_DATABASE: coupondb
+     volumes:
+        - mysql-data:/var/lib/mysql
+        - ./mysql-init:/docker-entrypoint-initdb.d
+     ports:
+        - "3306:3306"
+
+   backendsvc:
+     build: ./api 
+     container_name: backend-api
+     environment:
+        DB_HOST: mysql
+        DB_USER: root
+        DB_PASSWORD: suresh
+        DB_NAME: coupondb
+        JWT_SECRET: w3logicsSecretKey
+        RESET_ADMIN_PASS: 'true'
+     deponds_on:
+        - mysqlsvc
+     ports:
+        - "5000:5000"
+
+   frontendsvc:
+      build: ./client
+      container_name: frontend-react
+      ports:
+        - "3000:80"
+      depends_on:
+        - backendsvc      
+volumes:
+    mysql-data:
+         
